@@ -8,8 +8,8 @@ describe Lita::Handlers::RestartElvis, lita_handler: true do
   subject { described_class.new(robot) }
 
   before do
-    ENV['HEROKU_OAUTH_TOKEN'] = 'abcdef'
-    ENV['HEROKU_RESTARTABLE_APP_NAME'] = 'fake-elvis'
+    ENV['HEROKU_OAUTH_TOKEN'] ||= 'abcdef'
+    ENV['HEROKU_RESTARTABLE_APP_NAME'] ||= 'fake-elvis'
   end
 
   describe 'routes' do
@@ -34,6 +34,12 @@ describe Lita::Handlers::RestartElvis, lita_handler: true do
       expect(dyno_double).to receive(:restart_all).with('xyz')
 
       subject.restart_dyno_named('xyz')
+    end
+  end
+
+  describe 'lita restart elvis' do
+    it 'should work' do
+      send_message('lita restart elvis')
     end
   end
 end
